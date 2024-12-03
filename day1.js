@@ -32,3 +32,13 @@ const joinedNumbers = sortNumbers(numbers);
 const total = calculateTotalDistance(joinedNumbers);
 
 console.log(total);
+
+const countLeftInRight = (numbers) => {
+    const rightNumbers = numbers.map(n => n.right);
+    return numbers.reduce((count, number) => {
+        return count + number.left * rightNumbers.filter(n => n === number.left).length;
+    }, 0);
+};
+
+const leftInRightCount = countLeftInRight(numbers);
+console.log(leftInRightCount);
