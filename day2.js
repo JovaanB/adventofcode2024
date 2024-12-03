@@ -1,21 +1,34 @@
 import { inputs } from './day2-inputs.js';
 
-const parseInput = input => input.split('\n').map(line => line.split(' ').map(Number));
+const parseInput = (input) => {
+    return input.split('\n')
+        .map(line => line.split(' ')
+        .map(Number));
+};
 
-const isValidSequence = (current, next) => Math.abs(current - next) <= 3;
+const isValidDifference = (a, b) => Math.abs(a - b) <= 3;
 
-const checkLinePattern = (line, comparator) => {
-    return line.every((number, index) => {
-        if (index === line.length - 1) return true;
-        const nextNumber = line[index + 1];
-        return comparator(number, nextNumber) && isValidSequence(number, nextNumber);
+const isValidPattern = (numbers, pattern) => {
+    return numbers.every((num, i) => {
+        if (i === numbers.length - 1) return true;
+        const next = numbers[i + 1];
+        return pattern(num, next) && isValidDifference(num, next);
     });
 };
 
-const lineIsIncreasing = line => checkLinePattern(line, (a, b) => a < b);
-const lineIsDecreasing = line => checkLinePattern(line, (a, b) => a > b);
+const isMonotonic = (numbers) => {
+    return isValidPattern(numbers, (a, b) => a < b) || 
+           isValidPattern(numbers, (a, b) => a > b);
+};
 
-const numbers = parseInput(inputs);
-const safeLines = numbers.filter(line => lineIsIncreasing(line) || lineIsDecreasing(line));
+const canMakeMonotonic = (numbers) => {
+    return numbers.some((_, i) => {
+        const withoutElement = [...numbers.slice(0, i), ...numbers.slice(i + 1)];
+        return isMonotonic(withoutElement);
+    });
+};
 
-console.log(safeLines.length);
+const sequences = parseInput(inputs);
+const validSequences = sequences.filter(canMakeMonotonic);
+
+console.log(validSequences.length);
