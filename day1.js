@@ -41,4 +41,5 @@ const countLeftInRight = (numbers) => {
 };
 
 const leftInRightCount = countLeftInRight(numbers);
+
 console.log(leftInRightCount);
